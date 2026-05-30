@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Popup from "../../pages/Popup";
+import Popup from "../../pages/PopUp";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
