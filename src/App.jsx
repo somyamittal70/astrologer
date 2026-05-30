@@ -11,12 +11,12 @@ import FAQ from "./pages/FAQ";
 import Strip from "./pages/Strip";
 import PainPoint from "./pages/PainPoint";
 import TrustUs from "./pages/TrustUs";
-import PopUp from "./pages/PopUp";
+// import PopUp from "./pages/PopUp";
 
 function App() {
   return (
     <>
-      <PopUp />
+      {/* <PopUp /> */}
       <Header />
       <main>
         <Hero />

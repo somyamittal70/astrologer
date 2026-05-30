@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../components/Shared";
-import Popup from "../pages/PopUp";
+// import Popup from "../pages/PopUp";
 
 /* ── Canvas: rich dark-bg animation ── */
 const CTACanvas = () => {
@@ -244,7 +244,7 @@ const CTACanvas = () => {
 
 /* ── Main CTA ── */
 const CTA = () => {
-  const [showPopup, setShowPopup] = useState(false); // ← popup control
+  // const [showPopup, setShowPopup] = useState(false); // ← popup control
 
   return (
     <>
@@ -360,10 +360,10 @@ const CTA = () => {
               <a
                 href="#"
                 className="btn-gold"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowPopup(true);
-                }}
+                // onClick={(e) => {
+                //   e.preventDefault();
+                //   setShowPopup(true);
+                // }}
               >
                 Book Your Session Now ✦
               </a>
@@ -382,7 +382,7 @@ const CTA = () => {
       </section>
 
       {/* Popup */}
-      <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} />
+      {/* <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} /> */}
     </>
   );
 };
