@@ -501,7 +501,6 @@ const PainPoint = () => {
       <section className="pp-section">
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 48, padding: "0 24px" }}>
-          <div className="pp-tag">Emotional Challenges Abroad</div>
           <h2 className="pp-title font-marcellus">
             Sometimes Success Abroad
             <br />

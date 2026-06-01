@@ -20,8 +20,8 @@ const helpTopics = [
 
 const stats = [
   { number: "15+", label: "Years of Practice" },
-  { number: "50+", label: "Countries Served" },
-  { number: "10K+", label: "Lives Transformed" },
+  { number: "10+", label: "Countries Served" },
+  { number: "20K+", label: "Lives Transformed" },
 ];
 
 const About = () => {
@@ -201,7 +201,6 @@ const About = () => {
         {/* Top label */}
         <Reveal>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <span className="ab-tag">About Jyotirmay</span>
             <h2 className="ab-headline font-marcellus">Meet Jyotirmay</h2>
             <div className="ab-gold-line" />
           </div>

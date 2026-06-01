@@ -14,7 +14,6 @@ const Header = ({ onBookNow }) => {
     "Destiny",
     "About",
     "Services",
-    "Clients",
     "Testimonials",
     "FAQ",
   ];

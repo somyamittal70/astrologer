@@ -3,12 +3,6 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import logo from "/public/logo.png";
 
 /* ── SVG brand icons (no external lib needed) ── */
-const FacebookIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-  </svg>
-);
-
 const InstagramIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -57,7 +51,7 @@ const Footer = () => (
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #c9a84c;
+        color: #e3c164;
         text-decoration: none;
         transition: all 0.3s ease;
       }
@@ -70,14 +64,14 @@ const Footer = () => (
       }
 
       .footer-link {
-        color: rgba(255,255,255,0.5);
+        color: rgb(255, 255, 255);
         text-decoration: none;
         font-size: 0.81rem;
         transition: 0.2s;
       }
 
       .footer-link:hover {
-        color: #c9a84c;
+        color: #e8c053;
       }
 
       /* ── Fixed floating buttons ── */
@@ -103,8 +97,8 @@ const Footer = () => (
 
       .fab-call {
         left: 24px;
-        background: linear-gradient(135deg, #4a1a7a 0%, #6b2fa0 100%);
-        color: #f0d98a;
+        background: linear-gradient(135deg, #3d1960 0%, #6b2fa0 100%);
+        color: #ebd074;
         border: 1px solid rgba(201,168,76,0.35);
       }
 
@@ -175,7 +169,7 @@ const Footer = () => (
     {/* ── Fixed Floating Buttons ── */}
     <a href="tel:+918750803540" className="fab-call">
       <span className="fab-icon-wrap">
-        <Phone size={14} strokeWidth={2.2} color="#c9a84c" />
+        <Phone size={14} strokeWidth={2.2} color="#deb647" />
       </span>
       Call Us
     </a>
@@ -195,8 +189,8 @@ const Footer = () => (
     {/* ── Footer ── */}
     <footer
       style={{
-        background: "#1c0535",
-        color: "rgba(255,255,255,0.65)",
+        background: "#4b0082",
+        color: "rgb(254, 245, 245)",
         padding: "70px 5% 32px",
       }}
     >
@@ -260,18 +254,13 @@ const Footer = () => (
           >
             {[
               {
-                icon: <FacebookIcon />,
-                href: "https://facebook.com",
-                label: "Facebook",
-              },
-              {
                 icon: <InstagramIcon />,
-                href: "https://instagram.com",
+                href: "https://www.instagram.com/jyotirmaykamal",
                 label: "Instagram",
               },
               {
                 icon: <YoutubeIcon />,
-                href: "https://youtube.com",
+                href: "https://www.youtube.com/@tarotandwellness",
                 label: "YouTube",
               },
               {
@@ -370,13 +359,13 @@ const Footer = () => (
                 <Icon
                   size={15}
                   strokeWidth={1.5}
-                  color="#c9a84c"
+                  color="#f1cb64"
                   style={{ marginTop: 2, flexShrink: 0 }}
                 />
                 <span
                   style={{
                     fontSize: "0.8rem",
-                    color: "rgba(255,255,255,0.55)",
+                    color: "rgb(255, 255, 255)",
                     lineHeight: 1.5,
                   }}
                 >

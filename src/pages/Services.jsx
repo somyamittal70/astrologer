@@ -9,7 +9,6 @@ const services = [
     idealFor: ["Relationship confusion","Love and marriage questions","Career decisions","Emotional uncertainty"],
     cta: "Book Tarot Session",
     image: "/service1.jpg",
-    imageLeft: true,
   },
   {
     tag: "Vedic Wisdom",
@@ -18,7 +17,6 @@ const services = [
     idealFor: ["Career direction","Marriage compatibility","Family and financial concerns","Life purpose understanding"],
     cta: "Book Astrology Session",
     image: "/service2.jpg",
-    imageLeft: false,
   },
   {
     tag: "Safe & Confidential",
@@ -27,7 +25,6 @@ const services = [
     idealFor: ["Anxiety and stress","Emotional overwhelm","Relationship pain","Loneliness abroad"],
     cta: "Book Counselling Session",
     image: "/service3.jpg",
-    imageLeft: true,
   },
   {
     tag: "Energy & Healing",
@@ -36,7 +33,6 @@ const services = [
     idealFor: ["Emotional exhaustion","Negative energy","Mental restlessness","Inner imbalance"],
     cta: "Book Healing Session",
     image: "/service4.jpg",
-    imageLeft: false,
   },
   {
     tag: "Soul Journey",
@@ -45,7 +41,6 @@ const services = [
     idealFor: ["Repeated life struggles","Spiritual awakening","Soul purpose clarity","Deep emotional patterns"],
     cta: "Explore Akashic Reading",
     image: "/service5.jpg",
-    imageLeft: true,
   },
 ];
 
@@ -55,7 +50,6 @@ const hexPoints = (cx, cy, r) =>
     return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
   });
 
-/* ─── prop naam: onBookNow — App.jsx se aata hai ─── */
 const Services = ({ onBookNow }) => {
   const canvasRef = useRef(null);
   const wrapRef = useRef(null);
@@ -132,7 +126,13 @@ const Services = ({ onBookNow }) => {
         .svc-tag { display: inline-block; font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; color: #c9a84c; border: 1px solid rgba(201,168,76,0.35); border-radius: 999px; padding: 6px 18px; margin-bottom: 20px; background: rgba(201,168,76,0.05); }
         .svc-headline { font-size: clamp(2rem, 4vw, 3.2rem); color: #2d004f; margin: 0 0 18px; line-height: 1.2; }
         .svc-gold-line { width: 72px; height: 2.5px; margin: 0 auto; border-radius: 999px; background: linear-gradient(90deg, #c9a84c 0%, #f5df9a 50%, #c9a84c 100%); }
-        .svc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 6px; border-radius: 28px; overflow: hidden; border: 1px solid rgba(201,168,76,0.13); box-shadow: 0 8px 40px rgba(45,0,79,0.06); background: #fff; transition: box-shadow 0.35s ease; }
+        .svc-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr; /* image left, content right — hamesha */
+          gap: 0; margin-bottom: 6px; border-radius: 28px; overflow: hidden;
+          border: 1px solid rgba(201,168,76,0.13); box-shadow: 0 8px 40px rgba(45,0,79,0.06);
+          background: #fff; transition: box-shadow 0.35s ease;
+        }
         .svc-row:hover { box-shadow: 0 20px 64px rgba(45,0,79,0.12); }
         .svc-img-pane { position: relative; min-height: 380px; overflow: hidden; }
         .svc-img-pane img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.7s ease; }
@@ -165,7 +165,6 @@ const Services = ({ onBookNow }) => {
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: 72 }}>
-              <span className="svc-tag">What We Offer</span>
               <h2 className="svc-headline font-marcellus">Services Offered</h2>
               <div className="svc-gold-line" />
             </div>
@@ -175,29 +174,16 @@ const Services = ({ onBookNow }) => {
             <div key={i}>
               <Reveal delay={i * 80}>
                 <div className="svc-row">
-                  {s.imageLeft ? (
-                    <>
-                      <div className="svc-img-pane">
-                        <img src={s.image} alt={s.title} draggable={false} />
-                        <div className="svc-img-overlay" />
-                        <div className="svc-img-tag">{s.tag}</div>
-                      </div>
-                      <div className="svc-content-pane">
-                        <ContentBlock s={s} onBookNow={onBookNow} />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="svc-content-pane">
-                        <ContentBlock s={s} onBookNow={onBookNow} />
-                      </div>
-                      <div className="svc-img-pane">
-                        <img src={s.image} alt={s.title} draggable={false} />
-                        <div className="svc-img-overlay" />
-                        <div className="svc-img-tag">{s.tag}</div>
-                      </div>
-                    </>
-                  )}
+                  {/* Image — hamesha left */}
+                  <div className="svc-img-pane">
+                    <img src={s.image} alt={s.title} draggable={false} />
+                    <div className="svc-img-overlay" />
+                    <div className="svc-img-tag">{s.tag}</div>
+                  </div>
+                  {/* Content — hamesha right */}
+                  <div className="svc-content-pane">
+                    <ContentBlock s={s} onBookNow={onBookNow} />
+                  </div>
                 </div>
               </Reveal>
 
@@ -216,7 +202,6 @@ const Services = ({ onBookNow }) => {
   );
 };
 
-/* onBookNow — same naam har jagah, koi mismatch nahi */
 const ContentBlock = ({ s, onBookNow }) => (
   <>
     <div className="svc-content-number">{s.number} — {s.tag}</div>

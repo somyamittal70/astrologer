@@ -251,6 +251,7 @@ const Destiny = () => {
               style={{
                 position: "relative",
                 display: "inline-block",
+                marginBottom: 40,
                 width: "100%",
                 animation: "floatLuxury 6s ease-in-out infinite",
               }}
@@ -309,7 +310,7 @@ const Destiny = () => {
                 color: "var(--text-mid)",
                 fontSize: "0.85rem",
                 lineHeight: 1.7,
-                margin: "18px 0 24px",
+                margin: "15px 0 20px",
                 maxWidth: "520px",
               }}
             >
@@ -340,7 +341,7 @@ const Destiny = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        margin: "0 auto 16px",
+                        margin: "0 auto 13px",
                       }}
                     >
                       {c.icon}

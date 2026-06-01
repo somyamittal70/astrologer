@@ -45,8 +45,22 @@ const CTACanvas = () => {
 
     const initRings = () => {
       rings = [
-        { cx: W * 0.5, cy: H * 0.5, rx: Math.min(W, H) * 0.38, ry: Math.min(W, H) * 0.16, a: 0, spd: 0.003 },
-        { cx: W * 0.5, cy: H * 0.5, rx: Math.min(W, H) * 0.52, ry: Math.min(W, H) * 0.22, a: 0.8, spd: -0.002 },
+        {
+          cx: W * 0.5,
+          cy: H * 0.5,
+          rx: Math.min(W, H) * 0.38,
+          ry: Math.min(W, H) * 0.16,
+          a: 0,
+          spd: 0.003,
+        },
+        {
+          cx: W * 0.5,
+          cy: H * 0.5,
+          rx: Math.min(W, H) * 0.52,
+          ry: Math.min(W, H) * 0.22,
+          a: 0.8,
+          spd: -0.002,
+        },
         { cx: W * 0.18, cy: H * 0.2, rx: 90, ry: 42, a: 0.3, spd: 0.005 },
         { cx: W * 0.82, cy: H * 0.78, rx: 100, ry: 46, a: 1.1, spd: -0.004 },
         { cx: W * 0.78, cy: H * 0.15, rx: 70, ry: 32, a: 0.6, spd: 0.006 },
@@ -56,7 +70,10 @@ const CTACanvas = () => {
 
     const initFlowLines = () => {
       flowLines = Array.from({ length: 5 }, () => ({
-        pts: Array.from({ length: 8 }, (_, i) => ({ x: (i / 7) * W, y: rand(H * 0.1, H * 0.9) })),
+        pts: Array.from({ length: 8 }, (_, i) => ({
+          x: (i / 7) * W,
+          y: rand(H * 0.1, H * 0.9),
+        })),
         alpha: rand(0.03, 0.07),
         spd: rand(0.003, 0.007),
         phase: rand(0, Math.PI * 2),
@@ -64,7 +81,11 @@ const CTACanvas = () => {
       }));
     };
 
-    const initAll = () => { initParticles(); initRings(); initFlowLines(); };
+    const initAll = () => {
+      initParticles();
+      initRings();
+      initFlowLines();
+    };
 
     const spawnShoot = () => {
       shoot = {
@@ -84,11 +105,36 @@ const CTACanvas = () => {
       t += 0.01;
 
       [
-        { bx: W * 0.25 + Math.sin(t * 0.5) * 70, by: H * 0.3 + Math.cos(t * 0.4) * 50, r: 280, c: "rgba(201,168,76,0.09)" },
-        { bx: W * 0.75 + Math.cos(t * 0.45) * 60, by: H * 0.65 + Math.sin(t * 0.55) * 45, r: 310, c: "rgba(150,50,200,0.08)" },
-        { bx: W * 0.5 + Math.sin(t * 0.3) * 80, by: H * 0.5 + Math.cos(t * 0.35) * 55, r: 360, c: "rgba(201,168,76,0.06)" },
-        { bx: W * 0.1 + Math.cos(t * 0.6) * 35, by: H * 0.15 + Math.sin(t * 0.5) * 30, r: 190, c: "rgba(120,0,200,0.07)" },
-        { bx: W * 0.9 + Math.sin(t * 0.55) * 40, by: H * 0.85 + Math.cos(t * 0.6) * 35, r: 210, c: "rgba(201,168,76,0.07)" },
+        {
+          bx: W * 0.25 + Math.sin(t * 0.5) * 70,
+          by: H * 0.3 + Math.cos(t * 0.4) * 50,
+          r: 280,
+          c: "rgba(201,168,76,0.09)",
+        },
+        {
+          bx: W * 0.75 + Math.cos(t * 0.45) * 60,
+          by: H * 0.65 + Math.sin(t * 0.55) * 45,
+          r: 310,
+          c: "rgba(150,50,200,0.08)",
+        },
+        {
+          bx: W * 0.5 + Math.sin(t * 0.3) * 80,
+          by: H * 0.5 + Math.cos(t * 0.35) * 55,
+          r: 360,
+          c: "rgba(201,168,76,0.06)",
+        },
+        {
+          bx: W * 0.1 + Math.cos(t * 0.6) * 35,
+          by: H * 0.15 + Math.sin(t * 0.5) * 30,
+          r: 190,
+          c: "rgba(120,0,200,0.07)",
+        },
+        {
+          bx: W * 0.9 + Math.sin(t * 0.55) * 40,
+          by: H * 0.85 + Math.cos(t * 0.6) * 35,
+          r: 210,
+          c: "rgba(201,168,76,0.07)",
+        },
       ].forEach(({ bx, by, r, c }) => {
         const g = ctx.createRadialGradient(bx, by, 0, bx, by, r);
         g.addColorStop(0, c);
@@ -106,7 +152,9 @@ const CTACanvas = () => {
           const y = pt.y + Math.sin(fl.phase + i * 0.8) * H * 0.12;
           i === 0 ? ctx.moveTo(pt.x, y) : ctx.lineTo(pt.x, y);
         });
-        ctx.strokeStyle = fl.gold ? `rgba(201,168,76,${fl.alpha})` : `rgba(180,120,255,${fl.alpha})`;
+        ctx.strokeStyle = fl.gold
+          ? `rgba(201,168,76,${fl.alpha})`
+          : `rgba(180,120,255,${fl.alpha})`;
         ctx.lineWidth = 1.2;
         ctx.stroke();
       });
@@ -148,21 +196,30 @@ const CTACanvas = () => {
         p.y += p.vy;
         p.pulse += p.spd;
         const a = p.alpha * (0.5 + 0.5 * Math.sin(p.pulse));
-        if (p.y < -10) { p.y = H + 10; p.x = rand(0, W); }
+        if (p.y < -10) {
+          p.y = H + 10;
+          p.x = rand(0, W);
+        }
         if (p.x < -10) p.x = W + 10;
         if (p.x > W + 10) p.x = -10;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.gold ? `rgba(201,168,76,${a})` : `rgba(220,180,255,${a * 0.8})`;
+        ctx.fillStyle = p.gold
+          ? `rgba(201,168,76,${a})`
+          : `rgba(220,180,255,${a * 0.8})`;
         ctx.fill();
 
         if (p.r > 1.8) {
-          ctx.strokeStyle = p.gold ? `rgba(201,168,76,${a * 0.6})` : `rgba(220,180,255,${a * 0.5})`;
+          ctx.strokeStyle = p.gold
+            ? `rgba(201,168,76,${a * 0.6})`
+            : `rgba(220,180,255,${a * 0.5})`;
           ctx.lineWidth = 0.5;
           ctx.beginPath();
-          ctx.moveTo(p.x - p.r * 2, p.y); ctx.lineTo(p.x + p.r * 2, p.y);
-          ctx.moveTo(p.x, p.y - p.r * 2); ctx.lineTo(p.x, p.y + p.r * 2);
+          ctx.moveTo(p.x - p.r * 2, p.y);
+          ctx.lineTo(p.x + p.r * 2, p.y);
+          ctx.moveTo(p.x, p.y - p.r * 2);
+          ctx.lineTo(p.x, p.y + p.r * 2);
           ctx.stroke();
         }
       });
@@ -192,20 +249,31 @@ const CTACanvas = () => {
         const tail = ctx.createLinearGradient(
           shoot.x - Math.cos(shoot.angle) * shoot.len,
           shoot.y - Math.sin(shoot.angle) * shoot.len,
-          shoot.x, shoot.y,
+          shoot.x,
+          shoot.y,
         );
         tail.addColorStop(0, "transparent");
         tail.addColorStop(0.6, `rgba(255,230,130,${shoot.alpha * 0.5})`);
         tail.addColorStop(1, `rgba(255,215,80,${shoot.alpha})`);
 
         ctx.beginPath();
-        ctx.moveTo(shoot.x - Math.cos(shoot.angle) * shoot.len, shoot.y - Math.sin(shoot.angle) * shoot.len);
+        ctx.moveTo(
+          shoot.x - Math.cos(shoot.angle) * shoot.len,
+          shoot.y - Math.sin(shoot.angle) * shoot.len,
+        );
         ctx.lineTo(shoot.x, shoot.y);
         ctx.strokeStyle = tail;
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        const hg = ctx.createRadialGradient(shoot.x, shoot.y, 0, shoot.x, shoot.y, 8);
+        const hg = ctx.createRadialGradient(
+          shoot.x,
+          shoot.y,
+          0,
+          shoot.x,
+          shoot.y,
+          8,
+        );
         hg.addColorStop(0, `rgba(255,240,160,${shoot.alpha})`);
         hg.addColorStop(1, "transparent");
         ctx.fillStyle = hg;
@@ -236,7 +304,14 @@ const CTACanvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
     />
   );
 };
@@ -339,8 +414,6 @@ const CTA = ({ onBookNow }) => {
 
         <Reveal>
           <div className="cta-inner">
-            <div className="cta-badge">✦ Emotional Support & Guidance ✦</div>
-
             <h2 className="font-marcellus cta-title">
               You Don't Have To Carry
               <br />

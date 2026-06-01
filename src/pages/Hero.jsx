@@ -212,7 +212,7 @@ const Hero = ({ onBookNow }) => {
   const stats = [
     { num: "300K+", label: "Global Community\nInstagram & YouTube" },
     { num: "15+", label: "Years of\nExperience" },
-    { num: "50+", label: "Private Online\nSessions Worldwide" },
+    { num: "20K", label: "Private Online\nSessions Worldwide" },
   ];
 
   return (

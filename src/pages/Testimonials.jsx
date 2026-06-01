@@ -564,8 +564,6 @@ const Testimonials = () => (
         {/* Heading */}
         <Reveal>
           <div style={{ textAlign: "center" }}>
-            <div className="testi-badge">✦ Client Stories</div>
-
             <h2
               className="font-marcellus"
               style={{

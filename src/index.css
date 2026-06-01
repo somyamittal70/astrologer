@@ -395,7 +395,7 @@ p {
           background:rgba(201,168,76,0.08);
           border:1px solid rgba(201,168,76,0.22);
           color:#4b0082;
-          font-size:.9rem;
+          font-size:1.1rem;
           font-weight:600;
           white-space:nowrap;
           backdrop-filter:blur(10px);
@@ -440,7 +440,7 @@ p {
 
           .social-pill{
             padding:12px 20px;
-            font-size:.8rem;
+            font-size:1rem;
             gap:8px;
           }
 

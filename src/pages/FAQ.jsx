@@ -59,10 +59,7 @@ const ParticleCanvas = () => {
       gold: Math.random() > 0.6,
     });
 
-    let particles = Array.from(
-      { length: TOTAL },
-      makeParticle
-    );
+    let particles = Array.from({ length: TOTAL }, makeParticle);
 
     let blobT = 0;
 
@@ -88,14 +85,7 @@ const ParticleCanvas = () => {
       ];
 
       blobs.forEach((b) => {
-        const g = ctx.createRadialGradient(
-          b.x,
-          b.y,
-          0,
-          b.x,
-          b.y,
-          b.r
-        );
+        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
 
         g.addColorStop(0, b.color);
         g.addColorStop(1, "transparent");
@@ -113,8 +103,7 @@ const ParticleCanvas = () => {
         p.y += p.vy;
         p.pulse += p.speed;
 
-        const a =
-          p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+        const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
 
         if (p.y < -10) {
           p.y = H + 10;
@@ -146,10 +135,7 @@ const ParticleCanvas = () => {
       canvas.width = W;
       canvas.height = H;
 
-      particles = Array.from(
-        { length: TOTAL },
-        makeParticle
-      );
+      particles = Array.from({ length: TOTAL }, makeParticle);
     };
 
     window.addEventListener("resize", onResize);
@@ -379,12 +365,10 @@ const FAQ = () => {
       </style>
 
       <section id="faq" className="faq-section">
-
         {/* Animated Background */}
         <ParticleCanvas />
 
         <div className="faq-container">
-
           {/* Heading */}
           <Reveal>
             <div
@@ -393,49 +377,27 @@ const FAQ = () => {
                 marginBottom: 60,
               }}
             >
-              <span className="faq-tag">
-                ✦ Common Questions
-              </span>
-
               <h2
                 className="font-marcellus"
                 style={{
-                  fontSize:
-                    "clamp(1.8rem,3.5vw,2.8rem)",
+                  fontSize: "clamp(1.8rem,3.5vw,2.8rem)",
                   color: "#2d004f",
                   marginBottom: 14,
                 }}
               >
-                FAQ's About Astrology
+                Honest answers to the questions we hear most from first-time
+                seekers.
               </h2>
-
               <div
                 style={{
                   width: 70,
                   height: 3,
-                  background:
-                    "linear-gradient(90deg,#c9a84c,#f0d078,#c9a84c)",
+                  background: "linear-gradient(90deg,#c9a84c,#f0d078,#c9a84c)",
                   backgroundSize: "200% auto",
                   margin: "0 auto 18px",
                   borderRadius: 10,
                 }}
               />
-
-              <p
-                className="font-cormorant"
-                style={{
-                  fontSize: "1.1rem",
-                  color: "#746d8d",
-                  fontStyle: "italic",
-                  marginTop: 16,
-                  lineHeight: 1.8,
-                  maxWidth: 650,
-                  marginInline: "auto",
-                }}
-              >
-                Honest answers to the questions we hear
-                most from first-time seekers.
-              </p>
             </div>
           </Reveal>
 
@@ -444,12 +406,9 @@ const FAQ = () => {
             {items.map(([q, a], i) => (
               <Reveal key={q} delay={i * 70}>
                 <div className="faq-item">
-
                   <div
                     className="faq-question"
-                    onClick={() =>
-                      setOpen(open === i ? -1 : i)
-                    }
+                    onClick={() => setOpen(open === i ? -1 : i)}
                   >
                     <h4
                       className="font-marcellus"
@@ -463,20 +422,12 @@ const FAQ = () => {
                       {q}
                     </h4>
 
-                    <div
-                      className={`faq-toggle ${
-                        open === i ? "open" : ""
-                      }`}
-                    >
+                    <div className={`faq-toggle ${open === i ? "open" : ""}`}>
                       {open === i ? "−" : "+"}
                     </div>
                   </div>
 
-                  <div
-                    className={`faq-answer ${
-                      open === i ? "open" : ""
-                    }`}
-                  >
+                  <div className={`faq-answer ${open === i ? "open" : ""}`}>
                     <p
                       className="font-cormorant"
                       style={{
@@ -488,7 +439,6 @@ const FAQ = () => {
                       {a}
                     </p>
                   </div>
-
                 </div>
               </Reveal>
             ))}
