@@ -238,7 +238,7 @@ const Destiny = () => {
       <div
         style={{
           maxWidth: 1150,
-          margin: "0 auto",
+          margin: "auto",
           position: "relative",
           zIndex: 1,
         }}
