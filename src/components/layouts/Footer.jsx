@@ -43,15 +43,15 @@ const Footer = () => (
       }
 
       .footer-social {
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         background: rgba(255,255,255,0.07);
         border: 1px solid rgba(255,255,255,0.1);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #e3c164;
+        color: white;
         text-decoration: none;
         transition: all 0.3s ease;
       }
@@ -66,7 +66,7 @@ const Footer = () => (
       .footer-link {
         color: rgb(255, 255, 255);
         text-decoration: none;
-        font-size: 0.81rem;
+        font-size: 0.89rem;
         transition: 0.2s;
       }
 
@@ -169,7 +169,7 @@ const Footer = () => (
     {/* ── Fixed Floating Buttons ── */}
     <a href="tel:+918750803540" className="fab-call">
       <span className="fab-icon-wrap">
-        <Phone size={14} strokeWidth={2.2} color="#deb647" />
+        <Phone size={14} strokeWidth={2.2} color="white" />
       </span>
       Call Us
     </a>
@@ -189,7 +189,7 @@ const Footer = () => (
     {/* ── Footer ── */}
     <footer
       style={{
-        background: "#4b0082",
+        background: "#b67ddf",
         color: "rgb(254, 245, 245)",
         padding: "70px 5% 32px",
       }}
@@ -233,7 +233,7 @@ const Footer = () => (
 
           <p
             style={{
-              fontSize: "0.82rem",
+              fontSize: "1rem",
               lineHeight: 1.8,
               maxWidth: 240,
               marginBottom: 22,
@@ -287,7 +287,7 @@ const Footer = () => (
         <div>
           <h4
             className="font-marcellus"
-            style={{ color: "#fff", fontSize: "0.9rem", marginBottom: 18 }}
+            style={{ color: "#fff", fontSize: "1.25rem", marginBottom: 18 }}
           >
             Services
           </h4>
@@ -312,7 +312,7 @@ const Footer = () => (
         <div>
           <h4
             className="font-marcellus"
-            style={{ color: "#fff", fontSize: "0.9rem", marginBottom: 18 }}
+            style={{ color: "#fff", fontSize: "1.25rem", marginBottom: 18 }}
           >
             Quick Links
           </h4>
@@ -337,7 +337,7 @@ const Footer = () => (
         <div>
           <h4
             className="font-marcellus"
-            style={{ color: "#fff", fontSize: "0.9rem", marginBottom: 18 }}
+            style={{ color: "#fff", fontSize: "1.25rem", marginBottom: 18 }}
           >
             Contact
           </h4>
@@ -353,13 +353,14 @@ const Footer = () => (
                   display: "flex",
                   alignItems: "flex-start",
                   gap: 10,
+                  fontSize: "0.86rem",
                   marginBottom: 14,
                 }}
               >
                 <Icon
-                  size={15}
+                  size={20}
                   strokeWidth={1.5}
-                  color="#f1cb64"
+                  color="white"
                   style={{ marginTop: 2, flexShrink: 0 }}
                 />
                 <span
@@ -386,19 +387,19 @@ const Footer = () => (
           alignItems: "center",
           flexWrap: "wrap",
           gap: 10,
-          fontSize: "0.76rem",
-          color: "rgba(201,168,76,0.7)",
+          fontSize: "0.86rem",
+          color: "white",
         }}
       >
         <span>
           © 2025 Jyotish Vedic | Jyotirmay Tarot Expert. All rights reserved.
         </span>
         <span>
-          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>
+          <a href="#" style={{ color: "white", textDecoration: "none" }}>
             Privacy Policy
           </a>
           {" · "}
-          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>
+          <a href="#" style={{ color: "white", textDecoration: "none" }}>
             Terms of Service
           </a>
         </span>
