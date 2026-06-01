@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../components/Shared";
-import Popup from "../pages/PopUp";
 
 /* ── Canvas: rich dark-bg animation ── */
 const CTACanvas = () => {
@@ -243,7 +242,7 @@ const CTACanvas = () => {
 };
 
 /* ── Main CTA ── */
-const CTA = () => {
+const CTA = ({ onBookNow }) => {
   const [showPopup, setShowPopup] = useState(false); // ← popup control
 
   return (
@@ -362,7 +361,7 @@ const CTA = () => {
                 className="btn-gold"
                 onClick={(e) => {
                   e.preventDefault();
-                  setShowPopup(true);
+                  onBookNow();
                 }}
               >
                 Book Your Session Now ✦
@@ -380,9 +379,6 @@ const CTA = () => {
           </div>
         </Reveal>
       </section>
-
-      {/* Popup */}
-      <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
   );
 };

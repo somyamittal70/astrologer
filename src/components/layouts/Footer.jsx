@@ -1,8 +1,4 @@
-import {
-  MapPin,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 import logo from "/public/logo.png";
 
@@ -14,7 +10,16 @@ const FacebookIcon = () => (
 );
 
 const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 24 24"
+    width="18"
+    height="18"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
     <circle cx="12" cy="12" r="4" />
     <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -205,7 +210,14 @@ const Footer = () => (
       >
         {/* Brand */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 16,
+            }}
+          >
             <div
               style={{
                 background: "#fff",
@@ -225,13 +237,27 @@ const Footer = () => (
             </div>
           </div>
 
-          <p style={{ fontSize: "0.82rem", lineHeight: 1.8, maxWidth: 240, marginBottom: 22 }}>
-            Astrology is not just guesswork — it is based on precise astronomical
-            data, ancient wisdom, and human psychology.
+          <p
+            style={{
+              fontSize: "0.82rem",
+              lineHeight: 1.8,
+              maxWidth: 240,
+              marginBottom: 22,
+            }}
+          >
+            Astrology is not just guesswork — it is based on precise
+            astronomical data, ancient wisdom, and human psychology.
           </p>
 
           {/* Social Icons */}
-          <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 12,
+              flexWrap: "wrap",
+            }}
+          >
             {[
               {
                 icon: <FacebookIcon />,
@@ -278,15 +304,16 @@ const Footer = () => (
           </h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {[
-              "Birth Chart Reading",
-              "Career & Finance",
-              "Love & Compatibility",
-              "Annual Forecast",
-              "Vastu Consultation",
-              "Remedies & Rituals",
+              "Tarot Reading",
+              "Astrology Consultation",
+              "Emotional Counselling",
+              "Spiritual Healing",
+              "Akashic Records Reading",
             ].map((link) => (
               <li key={link} style={{ marginBottom: 12 }}>
-                <a href="#" className="footer-link">{link}</a>
+                <a href="#services" className="footer-link">
+                  {link}
+                </a>
               </li>
             ))}
           </ul>
@@ -301,9 +328,17 @@ const Footer = () => (
             Quick Links
           </h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {["Home", "About", "Blogs", "Testimonials", "FAQ", "Contact"].map((link) => (
-              <li key={link} style={{ marginBottom: 12 }}>
-                <a href="#" className="footer-link">{link}</a>
+            {[
+              { label: "Home", href: "#home" },
+              { label: "About", href: "#about" },
+              { label: "Clients", href: "#clients" },
+              { label: "Testimonials", href: "#testimonials" },
+              { label: "FAQ", href: "#faq" },
+            ].map(({ label, href }) => (
+              <li key={label} style={{ marginBottom: 12 }}>
+                <a href={href} className="footer-link">
+                  {label}
+                </a>
               </li>
             ))}
           </ul>
@@ -325,7 +360,12 @@ const Footer = () => (
             ].map(([Icon, text]) => (
               <li
                 key={text}
-                style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 14 }}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 10,
+                  marginBottom: 14,
+                }}
               >
                 <Icon
                   size={15}
@@ -333,7 +373,13 @@ const Footer = () => (
                   color="#c9a84c"
                   style={{ marginTop: 2, flexShrink: 0 }}
                 />
-                <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
+                <span
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "rgba(255,255,255,0.55)",
+                    lineHeight: 1.5,
+                  }}
+                >
                   {text}
                 </span>
               </li>
@@ -355,11 +401,17 @@ const Footer = () => (
           color: "rgba(201,168,76,0.7)",
         }}
       >
-        <span>© 2025 Jyotish Vedic | Jyotirmay Tarot Expert. All rights reserved.</span>
         <span>
-          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>Privacy Policy</a>
+          © 2025 Jyotish Vedic | Jyotirmay Tarot Expert. All rights reserved.
+        </span>
+        <span>
+          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>
+            Privacy Policy
+          </a>
           {" · "}
-          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>Terms of Service</a>
+          <a href="#" style={{ color: "#c9a84c", textDecoration: "none" }}>
+            Terms of Service
+          </a>
         </span>
       </div>
     </footer>

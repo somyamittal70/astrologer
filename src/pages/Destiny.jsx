@@ -221,6 +221,7 @@ const Destiny = () => {
         padding: "50px 5%",
         position: "relative",
         overflow: "hidden",
+        marginTop: 80,
       }}
     >
       <canvas

@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import bannerDesktop from "/public/banner.png";
-import Popup from "./PopUp";
 
-const Hero = () => {
+const Hero = ({ onBookNow }) => {
   const badgeRef = useRef(null);
   const titleRef = useRef(null);
   const subRef = useRef(null);
@@ -323,7 +322,7 @@ const Hero = () => {
             <h1
               ref={titleRef}
               style={{
-                fontSize: fs.h1,
+                fontSize: "50px",
                 color: "#4b267c",
                 lineHeight: isDesktop ? 1.06 : 1.25,
                 margin: isMobile
@@ -331,7 +330,7 @@ const Hero = () => {
                   : isTablet
                     ? "0 0 18px"
                     : "0 0 22px",
-                fontWeight: 800,
+                fontWeight: 700,
                 marginTop: "25px",
                 letterSpacing: isDesktop ? "-0.5px" : "0",
               }}
@@ -359,10 +358,10 @@ const Hero = () => {
             <p
               ref={subRef}
               style={{
-                fontSize: fs.sub,
-                color: "black",
+                fontSize: "15px",
+                color: "rgba(97, 95, 100, 0.9)",
                 maxWidth: isDesktop ? 510 : "100%",
-                marginBottom: isMobile ? "28px" : isTablet ? "32px" : "40px",
+                marginBottom: isMobile ? "10px" : isTablet ? "28px" : "35px",
                 lineHeight: 1.85,
               }}
             >
@@ -381,9 +380,9 @@ const Hero = () => {
               style={{
                 display: "flex",
                 flexDirection: isDesktop ? "row" : "column",
-                gap: isDesktop ? "14px" : "12px",
-                marginBottom: isMobile ? "36px" : isTablet ? "40px" : "48px",
-                maxWidth: isDesktop ? 480 : isTablet ? 380 : "100%",
+                gap: isDesktop ? "12px" : "10px",
+                marginBottom: isMobile ? "30px" : isTablet ? "34px" : "40px",
+                maxWidth: isDesktop ? 480 : isTablet ? 280 : "100%",
               }}
             >
               <a
@@ -391,7 +390,7 @@ const Hero = () => {
                 className="btn-primary"
                 onClick={(e) => {
                   e.preventDefault();
-                  setShowPopup(true);
+                  onBookNow();
                 }}
                 style={{
                   background:
@@ -443,7 +442,7 @@ const Hero = () => {
                 display: "grid",
                 gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3, 1fr)",
                 gap: isMobile ? "12px" : "14px",
-                maxWidth: isDesktop ? 560 : "100%",
+                maxWidth: isDesktop ? 500 : "100%",
               }}
             >
               {stats.map(({ num, label }, i) => (
@@ -490,11 +489,7 @@ const Hero = () => {
           </div>
         </div>
       </section>
-
-      {/* Popup */}
-      <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
-    
   );
 };
 

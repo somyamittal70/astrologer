@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../components/Shared";
-import Popup from "../pages/PopUp";
 
 const services = [
   {
@@ -81,7 +80,7 @@ const hexPoints = (cx, cy, r) =>
     return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
   });
 
-const Services = () => {
+const Services = ({ onBookNow }) => {
   const canvasRef = useRef(null);
   const wrapRef = useRef(null);
   const [showPopup, setShowPopup] = useState(false); // ← popup control
@@ -124,7 +123,8 @@ const Services = () => {
 
     let animId;
     const frame = (t) => {
-      const w = canvas.width, h = canvas.height;
+      const w = canvas.width,
+        h = canvas.height;
       ctx.clearRect(0, 0, w, h);
 
       floaters.forEach((f) => {
@@ -132,7 +132,10 @@ const Services = () => {
         const fy = (f.y + Math.cos(t * 0.00017 + f.phase * 1.2) * 0.06) * h;
         const fr = f.r * (0.88 + 0.12 * Math.sin(t * 0.0008 + f.phase));
         const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
-        g.addColorStop(0, f.gold ? "rgba(201,168,76,0.09)" : "rgba(130,80,200,0.07)");
+        g.addColorStop(
+          0,
+          f.gold ? "rgba(201,168,76,0.09)" : "rgba(130,80,200,0.07)",
+        );
         g.addColorStop(1, "rgba(0,0,0,0)");
         ctx.beginPath();
         ctx.arc(fx, fy, fr, 0, Math.PI * 2);
@@ -141,7 +144,8 @@ const Services = () => {
       });
 
       mandalaSet.forEach((m, mi) => {
-        const cx = m.xf * w, cy = m.yf * h;
+        const cx = m.xf * w,
+          cy = m.yf * h;
         const rr = Math.min(w, h) * 0.18;
         const rot = t * (mi % 2 === 0 ? 0.00005 : -0.00006) + mi * 1.2;
         ctx.save();
@@ -154,14 +158,17 @@ const Services = () => {
         ctx.stroke();
         const pts = hexPoints(0, 0, rr);
         ctx.beginPath();
-        pts.forEach((p, i) => i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]));
+        pts.forEach((p, i) =>
+          i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]),
+        );
         ctx.closePath();
         ctx.stroke();
         ctx.restore();
       });
 
       particles.forEach((p) => {
-        const tw = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * p.speed * 0.001 + p.phase));
+        const tw =
+          0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * p.speed * 0.001 + p.phase));
         const px = (((p.x + p.dx * t) % 1) + 1) % 1;
         const py = (((p.y + p.dy * t) % 1) + 1) % 1;
         ctx.beginPath();
@@ -307,10 +314,24 @@ const Services = () => {
       <section id="services" ref={wrapRef} className="svc-section">
         <canvas
           ref={canvasRef}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
         />
 
-        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: 72 }}>
               <span className="svc-tag">What We Offer</span>
@@ -332,13 +353,19 @@ const Services = () => {
                       </div>
                       <div className="svc-content-pane">
                         {/* ← onBookClick prop pass kiya */}
-                        <ContentBlock s={s} onBookClick={() => setShowPopup(true)} />
+                        <ContentBlock
+                          s={s}
+                          onBookClick={() => setShowPopup(true)}
+                        />
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="svc-content-pane">
-                        <ContentBlock s={s} onBookClick={() => setShowPopup(true)} />
+                        <ContentBlock
+                          s={s}
+                          onBookClick={() => setShowPopup(true)}
+                        />
                       </div>
                       <div className="svc-img-pane">
                         <img src={s.image} alt={s.title} draggable={false} />
@@ -361,15 +388,12 @@ const Services = () => {
           ))}
         </div>
       </section>
-
-      {/* Popup */}
-      <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
   );
 };
 
 /* ← onBookClick prop receive kiya aur button pe lagaya */
-const ContentBlock = ({ s, onBookClick }) => (
+const ContentBlock = ({ s, onBookNow }) => (
   <>
     <div className="svc-content-number">
       {s.number} — {s.tag}
@@ -386,10 +410,16 @@ const ContentBlock = ({ s, onBookClick }) => (
         </div>
       ))}
     </div>
-    <button onClick={onBookClick} className="svc-cta">
+    <a
+      onClick={(e) => {
+                  e.preventDefault();
+                  onBookNow();
+                }}
+      className="svc-cta"
+    >
       {s.cta}
       <span className="svc-cta-arrow">→</span>
-    </button>
+    </a>
   </>
 );
 

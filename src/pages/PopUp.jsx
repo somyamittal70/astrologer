@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { X, Sparkles, Star } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { X, Sparkles } from "lucide-react";
 
 /* ─── tiny reusable field ─── */
 const Field = ({ label, children }) => (
@@ -33,7 +33,6 @@ const inputStyle = {
   boxSizing: "border-box",
 };
 
-/* floating star particles */
 const FloatingStars = () =>
   Array.from({ length: 7 }, (_, i) => (
     <div
@@ -58,18 +57,27 @@ const PopUp = ({ isOpen, onClose }) => {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  /* show on every page load / refresh */
+  // Track whether user has manually closed — prevents auto-open from reopening
+  const manuallyClosed = useRef(false);
+
+  /* Auto-open on page load — only if not manually closed */
   useEffect(() => {
-    const t = setTimeout(() => setOpen(true), 600);
+    const t = setTimeout(() => {
+      if (!manuallyClosed.current) setOpen(true);
+    }, 600);
     return () => clearTimeout(t);
   }, []);
 
-  /* sync with external isOpen prop (e.g. Header Book Now button) */
+  /* Sync with external isOpen prop (Book Now buttons) */
   useEffect(() => {
-    if (isOpen !== undefined) setOpen(isOpen);
+    if (isOpen === true) {
+      manuallyClosed.current = false;
+      setOpen(true);
+    }
   }, [isOpen]);
 
   const handleClose = () => {
+    manuallyClosed.current = true; // ← mark as manually closed
     setOpen(false);
     onClose?.();
   };
@@ -79,7 +87,6 @@ const PopUp = ({ isOpen, onClose }) => {
     setSubmitted(true);
   };
 
-  /* reset form state when popup reopens */
   useEffect(() => {
     if (open) setSubmitted(false);
   }, [open]);
@@ -134,30 +141,30 @@ const PopUp = ({ isOpen, onClose }) => {
 
         @keyframes cardIn {
           from { opacity: 0; transform: scale(0.88) translateY(30px); }
-          to   { opacity: 1; transform: scale(1)    translateY(0); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .popup-close {
           position: absolute;
-          top: 16px;
-          right: 16px;
+          top: 14px;
+          right: 14px;
           width: 34px;
           height: 34px;
           border-radius: 50%;
-          background: rgba(74,26,122,0.07);
-          border: 1.5px solid rgba(74,26,122,0.15);
+          background: rgba(255,255,255,0.15);
+          border: 1.5px solid rgba(255,255,255,0.35);
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          color: #4a1a7a;
+          color: #fff;
           transition: all 0.2s;
-          z-index: 2;
+          z-index: 100000;
         }
 
         .popup-close:hover {
-          background: #4a1a7a;
-          color: #fff;
+          background: rgba(255,255,255,0.9);
+          color: #4a1a7a;
           transform: rotate(90deg);
         }
 
@@ -244,7 +251,7 @@ const PopUp = ({ isOpen, onClose }) => {
         }
 
         @keyframes popStar {
-          0%,100% { opacity: 0.3; transform: scale(1);   }
+          0%,100% { opacity: 0.3; transform: scale(1); }
           50%      { opacity: 0.9; transform: scale(1.5); }
         }
 
@@ -276,7 +283,10 @@ const PopUp = ({ isOpen, onClose }) => {
         }
       `}</style>
 
-      <div className="popup-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
+      <div
+        className="popup-overlay"
+        onClick={(e) => e.target === e.currentTarget && handleClose()}
+      >
         <div className="popup-card">
 
           {/* Close */}
@@ -286,23 +296,16 @@ const PopUp = ({ isOpen, onClose }) => {
 
           {/* Header */}
           <div className="popup-header">
-            {/* decorative rings */}
             <div className="popup-header-ring" style={{ width: 280, height: 280, top: -120, right: -80 }} />
             <div className="popup-header-ring" style={{ width: 180, height: 180, top: -70, right: -30 }} />
             <FloatingStars />
 
-            {/* gold ornament */}
             <div style={{ marginBottom: 14, position: "relative", zIndex: 1 }}>
               <div
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  background: "rgba(201,168,76,0.15)",
-                  border: "1px solid rgba(201,168,76,0.35)",
-                  borderRadius: 30,
-                  padding: "5px 14px",
-                  marginBottom: 12,
+                  display: "inline-flex", alignItems: "center", gap: 7,
+                  background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.35)",
+                  borderRadius: 30, padding: "5px 14px", marginBottom: 12,
                 }}
               >
                 <Sparkles size={13} color="#c9a84c" />
@@ -311,39 +314,22 @@ const PopUp = ({ isOpen, onClose }) => {
                 </span>
               </div>
 
-              <h2
-                style={{
-                  fontFamily: "'Marcellus', serif",
-                  color: "#fff",
-                  fontSize: "clamp(1.3rem, 4vw, 1.65rem)",
-                  lineHeight: 1.3,
-                  margin: 0,
-                }}
-              >
+              <h2 style={{ fontFamily: "'Marcellus', serif", color: "#fff", fontSize: "clamp(1.3rem, 4vw, 1.65rem)", lineHeight: 1.3, margin: 0 }}>
                 Book Your Personal<br />
                 <span style={{ color: "#c9a84c" }}>Astrology Session</span>
               </h2>
 
-              <p
-                style={{
-                  color: "rgba(255,255,255,0.65)",
-                  fontSize: "0.8rem",
-                  marginTop: 8,
-                  lineHeight: 1.6,
-                }}
-              >
+              <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.8rem", marginTop: 8, lineHeight: 1.6 }}>
                 Get clarity on life, career &amp; relationships — guided by the stars.
               </p>
             </div>
 
-            {/* gold line */}
             <div style={{ height: 2, background: "linear-gradient(90deg, #c9a84c, rgba(201,168,76,0.2))", borderRadius: 2, width: "40%", position: "relative", zIndex: 1 }} />
           </div>
 
           {/* Body */}
           <div className="popup-body">
             {submitted ? (
-              /* ── Success state ── */
               <div style={{ textAlign: "center", padding: "20px 0 10px" }}>
                 <div className="success-tick">✦</div>
                 <h3 style={{ fontFamily: "'Marcellus', serif", color: "#2e0057", fontSize: "1.3rem", marginBottom: 10 }}>
@@ -352,18 +338,12 @@ const PopUp = ({ isOpen, onClose }) => {
                 <p style={{ color: "#666", fontSize: "0.85rem", lineHeight: 1.7, maxWidth: 320, margin: "0 auto 24px" }}>
                   Thank you! We'll reach out within 24 hours to confirm your consultation.
                 </p>
-                <button
-                  onClick={handleClose}
-                  className="popup-submit"
-                  style={{ maxWidth: 200 }}
-                >
+                <button onClick={handleClose} className="popup-submit" style={{ maxWidth: 200 }}>
                   Close ✦
                 </button>
               </div>
             ) : (
-              /* ── Form ── */
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-
                 <div className="form-row">
                   <Field label="First Name">
                     <input className="input-focus" style={inputStyle} placeholder="Ravi" required />
@@ -389,13 +369,7 @@ const PopUp = ({ isOpen, onClose }) => {
                 <Field label="Consultation Type">
                   <select className="input-focus" style={{ ...inputStyle, cursor: "pointer" }} required>
                     <option value="">Select a topic…</option>
-                    {[
-                      "Marriage Challenges",
-                      "Emotional Healing",
-                      "Career Confusion",
-                      "Personal Growth",
-                      "Spiritual Awakening",
-                    ].map((o) => (
+                    {["Marriage Challenges", "Emotional Healing", "Career Confusion", "Personal Growth", "Spiritual Awakening"].map((o) => (
                       <option key={o}>{o}</option>
                     ))}
                   </select>

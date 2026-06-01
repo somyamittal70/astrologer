@@ -1,4 +1,5 @@
 import "./index.css";
+import { useState } from "react";
 import Header from "./components/layouts/Header";
 import Footer from "./components/layouts/Footer";
 import Hero from "./pages/Hero";
@@ -14,22 +15,26 @@ import TrustUs from "./pages/TrustUs";
 import PopUp from "./pages/PopUp";
 
 function App() {
+  const [showPopup, setShowPopup] = useState(false);
+
   return (
     <>
-      <Header />
+      <Header onBookNow={() => setShowPopup(true)} />
       <main>
-        <Hero />
+        <Hero onBookNow={() => setShowPopup(true)} />
         <Destiny />
         <Strip />
         <PainPoint />
         <About />
-        <Services />
+        <Services onBookNow={() => setShowPopup(true)} />
         <TrustUs />
         <Testimonials />
-        <CTA />
+        <CTA onBookNow={() => setShowPopup(true)} />
         <FAQ />
       </main>
       <Footer />
+      {/* Sirf ek popup — poori app ke liye */}
+      <PopUp isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
   );
 }

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import Popup from "../../pages/PopUp";
 
-const Header = () => {
+const Header = ({ onBookNow }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [showPopup, setShowPopup] = useState(false); // ← popup control
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -16,8 +14,8 @@ const Header = () => {
     "Destiny",
     "About",
     "Services",
-    "Testimonials",
     "Clients",
+    "Testimonials",
     "FAQ",
   ];
 
@@ -94,13 +92,12 @@ const Header = () => {
             ))}
 
             <li>
-              {/* ← href="#" kiya, onClick se popup open hoga */}
               <a
                 href="#"
                 className="btn-gold"
                 onClick={(e) => {
                   e.preventDefault();
-                  setShowPopup(true);
+                  onBookNow();
                 }}
                 style={{
                   padding: "11px 24px",
@@ -187,14 +184,9 @@ const Header = () => {
             </a>
           ))}
 
-          {/* Mobile Book Now → popup open */}
           <a
             href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setOpen(false);
-              setShowPopup(true);
-            }}
+             onClick={(e) => { e.preventDefault(); onBookNow(); }}
             style={{
               color: "#c9a84c",
               textDecoration: "none",
@@ -209,12 +201,6 @@ const Header = () => {
           </a>
         </div>
       )}
-
-      {/* POPUP — desktop + mobile dono se control hoga */}
-      <Popup
-        isOpen={showPopup}
-        onClose={() => setShowPopup(false)}
-      />
     </>
   );
 };
