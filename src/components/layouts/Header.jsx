@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-// import Popup from "../../pages/PopUp";
+import Popup from "../../pages/PopUp";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  // const [showPopup, setShowPopup] = useState(false); // ← popup control
+  const [showPopup, setShowPopup] = useState(false); // ← popup control
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -94,13 +94,14 @@ const Header = () => {
             ))}
 
             <li>
+              {/* ← href="#" kiya, onClick se popup open hoga */}
               <a
                 href="#"
                 className="btn-gold"
-                // onClick={(e) => {
-                //   e.preventDefault();
-                //   setShowPopup(true);
-                // }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowPopup(true);
+                }}
                 style={{
                   padding: "11px 24px",
                   fontSize: "0.92rem",
@@ -189,11 +190,11 @@ const Header = () => {
           {/* Mobile Book Now → popup open */}
           <a
             href="#"
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   setOpen(false);
-            //   setShowPopup(true);
-            // }}
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              setShowPopup(true);
+            }}
             style={{
               color: "#c9a84c",
               textDecoration: "none",
@@ -210,10 +211,10 @@ const Header = () => {
       )}
 
       {/* POPUP — desktop + mobile dono se control hoga */}
-      {/* <Popup
+      <Popup
         isOpen={showPopup}
         onClose={() => setShowPopup(false)}
-      /> */}
+      />
     </>
   );
 };

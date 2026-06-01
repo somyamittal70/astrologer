@@ -1,387 +1,430 @@
-// import { useEffect, useRef, useState } from "react";
-// import { Reveal } from "../components/Shared";
+import { useState, useEffect } from "react";
+import { X, Sparkles, Star } from "lucide-react";
 
-// /* ── Canvas: rich dark-bg animation ── */
-// const CTACanvas = () => {
-//   const canvasRef = useRef(null);
-//   const rafRef = useRef(null);
+/* ─── tiny reusable field ─── */
+const Field = ({ label, children }) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+    <label
+      style={{
+        fontSize: "0.72rem",
+        fontWeight: 600,
+        letterSpacing: "0.07em",
+        textTransform: "uppercase",
+        color: "#4a1a7a",
+      }}
+    >
+      {label}
+    </label>
+    {children}
+  </div>
+);
 
-//   useEffect(() => {
-//     const canvas = canvasRef.current;
-//     if (!canvas) return;
-//     const ctx = canvas.getContext("2d");
-//     const rand = (a, b) => Math.random() * (b - a) + a;
+const inputStyle = {
+  width: "100%",
+  padding: "10px 13px",
+  borderRadius: 10,
+  border: "1.5px solid rgba(74,26,122,0.18)",
+  background: "#faf8ff",
+  fontSize: "0.84rem",
+  color: "#1c0535",
+  outline: "none",
+  fontFamily: "inherit",
+  transition: "border-color 0.2s, box-shadow 0.2s",
+  boxSizing: "border-box",
+};
 
-//     let W,
-//       H,
-//       t = 0;
-//     let particles = [];
-//     let rings = [];
-//     let shoot = null;
-//     let shootTimer;
-//     let flowLines = [];
+/* floating star particles */
+const FloatingStars = () =>
+  Array.from({ length: 7 }, (_, i) => (
+    <div
+      key={i}
+      style={{
+        position: "absolute",
+        top: `${[8, 18, 72, 85, 12, 60, 40][i]}%`,
+        left: `${[5, 88, 92, 6, 50, 78, 20][i]}%`,
+        color: i % 2 === 0 ? "#c9a84c" : "rgba(74,26,122,0.25)",
+        fontSize: ["10px", "7px", "9px", "6px", "8px", "7px", "10px"][i],
+        animation: `popStar ${2.5 + i * 0.4}s ease-in-out infinite`,
+        animationDelay: `${i * 0.35}s`,
+        pointerEvents: "none",
+        userSelect: "none",
+      }}
+    >
+      ✦
+    </div>
+  ));
 
-//     const resize = () => {
-//       W = canvas.offsetWidth;
-//       H = canvas.offsetHeight;
-//       canvas.width = W;
-//       canvas.height = H;
-//       initAll();
-//     };
+const PopUp = ({ isOpen, onClose }) => {
+  const [open, setOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-//     const initParticles = () => {
-//       particles = Array.from({ length: 70 }, () => ({
-//         x: rand(0, W),
-//         y: rand(0, H),
-//         r: rand(0.6, 2.8),
-//         vx: rand(-0.1, 0.1),
-//         vy: rand(-0.28, -0.07),
-//         alpha: rand(0.15, 0.65),
-//         pulse: rand(0, Math.PI * 2),
-//         spd: rand(0.008, 0.022),
-//         gold: Math.random() > 0.5,
-//       }));
-//     };
+  /* show on every page load / refresh */
+  useEffect(() => {
+    const t = setTimeout(() => setOpen(true), 600);
+    return () => clearTimeout(t);
+  }, []);
 
-//     const initRings = () => {
-//       rings = [
-//         { cx: W * 0.5, cy: H * 0.5, rx: Math.min(W, H) * 0.38, ry: Math.min(W, H) * 0.16, a: 0, spd: 0.003 },
-//         { cx: W * 0.5, cy: H * 0.5, rx: Math.min(W, H) * 0.52, ry: Math.min(W, H) * 0.22, a: 0.8, spd: -0.002 },
-//         { cx: W * 0.18, cy: H * 0.2, rx: 90, ry: 42, a: 0.3, spd: 0.005 },
-//         { cx: W * 0.82, cy: H * 0.78, rx: 100, ry: 46, a: 1.1, spd: -0.004 },
-//         { cx: W * 0.78, cy: H * 0.15, rx: 70, ry: 32, a: 0.6, spd: 0.006 },
-//         { cx: W * 0.2, cy: H * 0.82, rx: 80, ry: 36, a: 1.5, spd: -0.005 },
-//       ];
-//     };
+  /* sync with external isOpen prop (e.g. Header Book Now button) */
+  useEffect(() => {
+    if (isOpen !== undefined) setOpen(isOpen);
+  }, [isOpen]);
 
-//     const initFlowLines = () => {
-//       flowLines = Array.from({ length: 5 }, () => ({
-//         pts: Array.from({ length: 8 }, (_, i) => ({ x: (i / 7) * W, y: rand(H * 0.1, H * 0.9) })),
-//         alpha: rand(0.03, 0.07),
-//         spd: rand(0.003, 0.007),
-//         phase: rand(0, Math.PI * 2),
-//         gold: Math.random() > 0.5,
-//       }));
-//     };
+  const handleClose = () => {
+    setOpen(false);
+    onClose?.();
+  };
 
-//     const initAll = () => { initParticles(); initRings(); initFlowLines(); };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
 
-//     const spawnShoot = () => {
-//       shoot = {
-//         x: rand(W * 0.05, W * 0.8),
-//         y: rand(H * 0.05, H * 0.35),
-//         len: rand(100, 160),
-//         alpha: 1,
-//         angle: rand(18, 38) * (Math.PI / 180),
-//         speed: rand(7, 12),
-//         life: 1,
-//       };
-//     };
-//     shootTimer = setTimeout(spawnShoot, rand(800, 2000));
+  /* reset form state when popup reopens */
+  useEffect(() => {
+    if (open) setSubmitted(false);
+  }, [open]);
 
-//     const draw = () => {
-//       ctx.clearRect(0, 0, W, H);
-//       t += 0.01;
+  if (!open) return null;
 
-//       [
-//         { bx: W * 0.25 + Math.sin(t * 0.5) * 70, by: H * 0.3 + Math.cos(t * 0.4) * 50, r: 280, c: "rgba(201,168,76,0.09)" },
-//         { bx: W * 0.75 + Math.cos(t * 0.45) * 60, by: H * 0.65 + Math.sin(t * 0.55) * 45, r: 310, c: "rgba(150,50,200,0.08)" },
-//         { bx: W * 0.5 + Math.sin(t * 0.3) * 80, by: H * 0.5 + Math.cos(t * 0.35) * 55, r: 360, c: "rgba(201,168,76,0.06)" },
-//         { bx: W * 0.1 + Math.cos(t * 0.6) * 35, by: H * 0.15 + Math.sin(t * 0.5) * 30, r: 190, c: "rgba(120,0,200,0.07)" },
-//         { bx: W * 0.9 + Math.sin(t * 0.55) * 40, by: H * 0.85 + Math.cos(t * 0.6) * 35, r: 210, c: "rgba(201,168,76,0.07)" },
-//       ].forEach(({ bx, by, r, c }) => {
-//         const g = ctx.createRadialGradient(bx, by, 0, bx, by, r);
-//         g.addColorStop(0, c);
-//         g.addColorStop(1, "transparent");
-//         ctx.fillStyle = g;
-//         ctx.beginPath();
-//         ctx.arc(bx, by, r, 0, Math.PI * 2);
-//         ctx.fill();
-//       });
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Lato:wght@300;400;600&display=swap');
 
-//       flowLines.forEach((fl) => {
-//         fl.phase += fl.spd;
-//         ctx.beginPath();
-//         fl.pts.forEach((pt, i) => {
-//           const y = pt.y + Math.sin(fl.phase + i * 0.8) * H * 0.12;
-//           i === 0 ? ctx.moveTo(pt.x, y) : ctx.lineTo(pt.x, y);
-//         });
-//         ctx.strokeStyle = fl.gold ? `rgba(201,168,76,${fl.alpha})` : `rgba(180,120,255,${fl.alpha})`;
-//         ctx.lineWidth = 1.2;
-//         ctx.stroke();
-//       });
+        .popup-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 0, 30, 0.72);
+          backdrop-filter: blur(6px);
+          z-index: 99999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          animation: overlayIn 0.35s ease forwards;
+        }
 
-//       rings.forEach((ring) => {
-//         ring.a += ring.spd;
-//         ctx.save();
-//         ctx.translate(ring.cx, ring.cy);
-//         ctx.rotate(ring.a * 0.1);
-//         ctx.scale(1, ring.ry / ring.rx);
-//         ctx.beginPath();
-//         ctx.arc(0, 0, ring.rx, 0, Math.PI * 2);
-//         ctx.strokeStyle = "rgba(201,168,76,0.09)";
-//         ctx.lineWidth = 0.7;
-//         ctx.setLineDash([3, 8]);
-//         ctx.stroke();
-//         ctx.setLineDash([]);
-//         ctx.restore();
+        @keyframes overlayIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
 
-//         const dotX = ring.cx + Math.cos(ring.a) * ring.rx;
-//         const dotY = ring.cy + Math.sin(ring.a) * ring.ry;
-//         const da = 0.35 + 0.25 * Math.sin(t * 1.5 + ring.a);
-//         ctx.beginPath();
-//         ctx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
-//         ctx.fillStyle = `rgba(201,168,76,${da})`;
-//         ctx.fill();
+        .popup-card {
+          background: #fff;
+          border-radius: 24px;
+          width: 100%;
+          max-width: 560px;
+          max-height: 92vh;
+          overflow-y: auto;
+          position: relative;
+          box-shadow:
+            0 0 0 1px rgba(201,168,76,0.25),
+            0 32px 80px rgba(28,5,53,0.45),
+            0 0 60px rgba(201,168,76,0.08);
+          animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(74,26,122,0.2) transparent;
+        }
 
-//         const gw = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 10);
-//         gw.addColorStop(0, `rgba(201,168,76,${da * 0.35})`);
-//         gw.addColorStop(1, "transparent");
-//         ctx.fillStyle = gw;
-//         ctx.beginPath();
-//         ctx.arc(dotX, dotY, 10, 0, Math.PI * 2);
-//         ctx.fill();
-//       });
+        .popup-card::-webkit-scrollbar { width: 4px; }
+        .popup-card::-webkit-scrollbar-thumb {
+          background: rgba(74,26,122,0.2);
+          border-radius: 4px;
+        }
 
-//       particles.forEach((p) => {
-//         p.x += p.vx;
-//         p.y += p.vy;
-//         p.pulse += p.spd;
-//         const a = p.alpha * (0.5 + 0.5 * Math.sin(p.pulse));
-//         if (p.y < -10) { p.y = H + 10; p.x = rand(0, W); }
-//         if (p.x < -10) p.x = W + 10;
-//         if (p.x > W + 10) p.x = -10;
+        @keyframes cardIn {
+          from { opacity: 0; transform: scale(0.88) translateY(30px); }
+          to   { opacity: 1; transform: scale(1)    translateY(0); }
+        }
 
-//         ctx.beginPath();
-//         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-//         ctx.fillStyle = p.gold ? `rgba(201,168,76,${a})` : `rgba(220,180,255,${a * 0.8})`;
-//         ctx.fill();
+        .popup-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          background: rgba(74,26,122,0.07);
+          border: 1.5px solid rgba(74,26,122,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #4a1a7a;
+          transition: all 0.2s;
+          z-index: 2;
+        }
 
-//         if (p.r > 1.8) {
-//           ctx.strokeStyle = p.gold ? `rgba(201,168,76,${a * 0.6})` : `rgba(220,180,255,${a * 0.5})`;
-//           ctx.lineWidth = 0.5;
-//           ctx.beginPath();
-//           ctx.moveTo(p.x - p.r * 2, p.y); ctx.lineTo(p.x + p.r * 2, p.y);
-//           ctx.moveTo(p.x, p.y - p.r * 2); ctx.lineTo(p.x, p.y + p.r * 2);
-//           ctx.stroke();
-//         }
-//       });
+        .popup-close:hover {
+          background: #4a1a7a;
+          color: #fff;
+          transform: rotate(90deg);
+        }
 
-//       for (let i = 0; i < particles.length; i++) {
-//         for (let j = i + 1; j < particles.length; j++) {
-//           const dx = particles[i].x - particles[j].x;
-//           const dy = particles[i].y - particles[j].y;
-//           const d = Math.sqrt(dx * dx + dy * dy);
-//           if (d < 95) {
-//             ctx.beginPath();
-//             ctx.moveTo(particles[i].x, particles[i].y);
-//             ctx.lineTo(particles[j].x, particles[j].y);
-//             ctx.strokeStyle = `rgba(201,168,76,${(1 - d / 95) * 0.1})`;
-//             ctx.lineWidth = 0.4;
-//             ctx.stroke();
-//           }
-//         }
-//       }
+        .popup-header {
+          background: linear-gradient(135deg, #2e0057 0%, #4b0082 60%, #3a006f 100%);
+          padding: 32px 36px 28px;
+          border-radius: 22px 22px 0 0;
+          position: relative;
+          overflow: hidden;
+        }
 
-//       if (shoot) {
-//         shoot.x += Math.cos(shoot.angle) * shoot.speed;
-//         shoot.y += Math.sin(shoot.angle) * shoot.speed;
-//         shoot.life -= 0.018;
-//         shoot.alpha = shoot.life;
+        .popup-header::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 15% 50%, rgba(201,168,76,0.18), transparent 40%),
+            radial-gradient(circle at 85% 20%, rgba(255,255,255,0.07), transparent 35%);
+          pointer-events: none;
+        }
 
-//         const tail = ctx.createLinearGradient(
-//           shoot.x - Math.cos(shoot.angle) * shoot.len,
-//           shoot.y - Math.sin(shoot.angle) * shoot.len,
-//           shoot.x, shoot.y,
-//         );
-//         tail.addColorStop(0, "transparent");
-//         tail.addColorStop(0.6, `rgba(255,230,130,${shoot.alpha * 0.5})`);
-//         tail.addColorStop(1, `rgba(255,215,80,${shoot.alpha})`);
+        .popup-header-ring {
+          position: absolute;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.07);
+        }
 
-//         ctx.beginPath();
-//         ctx.moveTo(shoot.x - Math.cos(shoot.angle) * shoot.len, shoot.y - Math.sin(shoot.angle) * shoot.len);
-//         ctx.lineTo(shoot.x, shoot.y);
-//         ctx.strokeStyle = tail;
-//         ctx.lineWidth = 2;
-//         ctx.stroke();
+        .popup-body {
+          padding: 28px 36px 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
 
-//         const hg = ctx.createRadialGradient(shoot.x, shoot.y, 0, shoot.x, shoot.y, 8);
-//         hg.addColorStop(0, `rgba(255,240,160,${shoot.alpha})`);
-//         hg.addColorStop(1, "transparent");
-//         ctx.fillStyle = hg;
-//         ctx.beginPath();
-//         ctx.arc(shoot.x, shoot.y, 8, 0, Math.PI * 2);
-//         ctx.fill();
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
 
-//         if (shoot.life <= 0 || shoot.x > W + 80 || shoot.y > H + 80) {
-//           shoot = null;
-//           shootTimer = setTimeout(spawnShoot, rand(3500, 7000));
-//         }
-//       }
+        .input-focus:focus {
+          border-color: #c9a84c !important;
+          box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+          background: #fff !important;
+        }
 
-//       rafRef.current = requestAnimationFrame(draw);
-//     };
+        .popup-submit {
+          width: 100%;
+          padding: 14px;
+          background: linear-gradient(135deg, #2e0057 0%, #6b2fa0 100%);
+          color: #f0d98a;
+          border: none;
+          border-radius: 12px;
+          font-family: 'Marcellus', serif;
+          font-size: 1rem;
+          letter-spacing: 0.04em;
+          cursor: pointer;
+          transition: all 0.25s;
+          box-shadow: 0 6px 22px rgba(74,26,122,0.35);
+          position: relative;
+          overflow: hidden;
+        }
 
-//     resize();
-//     window.addEventListener("resize", resize);
-//     draw();
+        .popup-submit::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(201,168,76,0.12), transparent);
+          opacity: 0;
+          transition: opacity 0.25s;
+        }
 
-//     return () => {
-//       cancelAnimationFrame(rafRef.current);
-//       clearTimeout(shootTimer);
-//       window.removeEventListener("resize", resize);
-//     };
-//   }, []);
+        .popup-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(74,26,122,0.45);
+        }
 
-//   return (
-//     <canvas
-//       ref={canvasRef}
-//       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
-//     />
-//   );
-// };
+        .popup-submit:hover::after { opacity: 1; }
 
-// /* ── Main CTA ── */
-// const CTA = () => {
-//   const [showPopup, setShowPopup] = useState(false); // ← popup control
+        .popup-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+          margin: 2px 0;
+        }
 
-//   return (
-//     <>
-//       <style>{`
-//         .cta-section{
-//           background:#ffffff;
-//           padding:110px 5% 120px;
-//           text-align:center;
-//           position:relative;
-//           overflow:hidden;
-//         }
-//         .cta-center-glow{
-//           position:absolute;
-//           inset:0;
-//           background:
-//             radial-gradient(ellipse 65% 70% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 65%),
-//             radial-gradient(ellipse 40% 40% at 20% 20%, rgba(75,0,130,0.05) 0%, transparent 60%),
-//             radial-gradient(ellipse 35% 35% at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 55%);
-//           pointer-events:none;
-//           z-index:0;
-//         }
-//         .cta-inner{ max-width:700px; margin:0 auto; position:relative; z-index:2; }
-//         .cta-badge{
-//           display:inline-flex; align-items:center; gap:10px;
-//           background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3);
-//           color:rgba(232,204,122,0.95); padding:8px 22px; border-radius:999px;
-//           font-size:.68rem; letter-spacing:3.5px; text-transform:uppercase;
-//           font-family:"Poppins",sans-serif; font-weight:600; margin-bottom:28px;
-//           animation:fade-up .7s ease both;
-//         }
-//         .cta-title{
-//           font-size:clamp(1.9rem,4.5vw,3rem); color:#4b0082;
-//           line-height:1.22; margin-bottom:0; animation:fade-up .7s .15s ease both;
-//         }
-//         .cta-title span{
-//           background:linear-gradient(90deg,#c9a84c,#f0d078,#c9a84c);
-//           background-size:200% auto;
-//           -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-//           background-clip:text; animation:shimmer 3s linear infinite;
-//         }
-//         .cta-divider{
-//           width:70px; height:2px;
-//           background:linear-gradient(90deg,transparent,#c9a84c,transparent);
-//           margin:24px auto; border-radius:2px; animation:fade-up .7s .3s ease both;
-//         }
-//         .cta-sub{
-//           font-size:1.18rem; color:black; max-width:500px;
-//           margin:0 auto 44px; line-height:1.85; animation:fade-up .7s .45s ease both;
-//         }
-//         .cta-buttons{
-//           display:flex; gap:16px; justify-content:center;
-//           flex-wrap:wrap; animation:fade-up .7s .6s ease both;
-//         }
-//         .cta-pills{
-//           display:flex; gap:12px; justify-content:center;
-//           flex-wrap:wrap; margin-top:42px; animation:fade-up .7s .75s ease both;
-//         }
-//         .cta-pill{
-//           display:inline-flex; align-items:center; gap:7px;
-//           padding:8px 18px; border-radius:999px;
-//           background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
-//           color:rgba(255,255,255,0.65); font-size:.72rem;
-//           font-family:"Poppins",sans-serif; letter-spacing:.5px;
-//           backdrop-filter:blur(6px); transition:background .3s,border-color .3s,color .3s;
-//         }
-//         .cta-pill:hover{
-//           background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.35);
-//           color:rgba(232,204,122,0.95);
-//         }
-//         .cta-pill-dot{ width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.6; }
-//         .cta-symbol{
-//           font-size:3.2rem; display:block; margin-bottom:24px;
-//           animation:float 5s ease-in-out infinite,fade-up .7s ease both;
-//           filter:drop-shadow(0 0 20px rgba(201,168,76,0.35));
-//         }
-//         @media(max-width:768px){
-//           .cta-section{ padding:80px 5%; }
-//           .cta-title{ font-size:1.8rem; }
-//           .cta-sub{ font-size:1.05rem; }
-//           .cta-pills{ gap:9px; }
-//           .cta-pill{ font-size:.66rem; padding:7px 14px; }
-//         }
-//         @media(max-width:480px){
-//           .cta-section{ padding:64px 4%; }
-//           .cta-buttons{ flex-direction:column; align-items:center; }
-//           .cta-pill{ font-size:.62rem; }
-//         }
-//       `}</style>
+        @keyframes popStar {
+          0%,100% { opacity: 0.3; transform: scale(1);   }
+          50%      { opacity: 0.9; transform: scale(1.5); }
+        }
 
-//       <section className="cta-section">
-//         <CTACanvas />
-//         <div className="cta-center-glow" />
+        .success-tick {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #2e0057, #6b2fa0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 20px;
+          font-size: 28px;
+          box-shadow: 0 8px 24px rgba(74,26,122,0.3);
+          animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+        }
 
-//         <Reveal>
-//           <div className="cta-inner">
-//             <div className="cta-badge">✦ Emotional Support & Guidance ✦</div>
+        @keyframes bounceIn {
+          from { transform: scale(0); opacity: 0; }
+          to   { transform: scale(1); opacity: 1; }
+        }
 
-//             <h2 className="font-marcellus cta-title">
-//               You Don't Have To Carry
-//               <br />
-//               Everything <span>Alone</span>
-//             </h2>
+        @media (max-width: 520px) {
+          .popup-header  { padding: 26px 22px 22px; }
+          .popup-body    { padding: 20px 22px 26px; }
+          .form-row      { grid-template-columns: 1fr; gap: 14px; }
+          .popup-card    { border-radius: 18px; }
+          .popup-header  { border-radius: 16px 16px 0 0; }
+        }
+      `}</style>
 
-//             <div className="cta-divider" />
+      <div className="popup-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
+        <div className="popup-card">
 
-//             <p className="font-cormorant cta-sub">
-//               Sometimes one honest conversation can bring clarity, emotional
-//               relief and inner peace.
-//             </p>
+          {/* Close */}
+          <button className="popup-close" onClick={handleClose}>
+            <X size={16} strokeWidth={2.2} />
+          </button>
 
-//             <div className="cta-buttons">
-//               {/* ← Book Now button popup se linked */}
-//               <a
-//                 href="#"
-//                 className="btn-gold"
-//                 onClick={(e) => {
-//                   e.preventDefault();
-//                   setShowPopup(true);
-//                 }}
-//               >
-//                 Book Your Session Now ✦
-//               </a>
+          {/* Header */}
+          <div className="popup-header">
+            {/* decorative rings */}
+            <div className="popup-header-ring" style={{ width: 280, height: 280, top: -120, right: -80 }} />
+            <div className="popup-header-ring" style={{ width: 180, height: 180, top: -70, right: -30 }} />
+            <FloatingStars />
 
-//               <a
-//                 href="https://wa.me/918750803540"
-//                 target="_blank"
-//                 rel="noopener noreferrer"
-//                 className="btn-gold"
-//               >
-//                 Chat on WhatsApp
-//               </a>
-//             </div>
-//           </div>
-//         </Reveal>
-//       </section>
+            {/* gold ornament */}
+            <div style={{ marginBottom: 14, position: "relative", zIndex: 1 }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 7,
+                  background: "rgba(201,168,76,0.15)",
+                  border: "1px solid rgba(201,168,76,0.35)",
+                  borderRadius: 30,
+                  padding: "5px 14px",
+                  marginBottom: 12,
+                }}
+              >
+                <Sparkles size={13} color="#c9a84c" />
+                <span style={{ fontSize: "0.7rem", color: "#c9a84c", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>
+                  Free Consultation Available
+                </span>
+              </div>
 
-//     </>
-//   );
-// };
+              <h2
+                style={{
+                  fontFamily: "'Marcellus', serif",
+                  color: "#fff",
+                  fontSize: "clamp(1.3rem, 4vw, 1.65rem)",
+                  lineHeight: 1.3,
+                  margin: 0,
+                }}
+              >
+                Book Your Personal<br />
+                <span style={{ color: "#c9a84c" }}>Astrology Session</span>
+              </h2>
 
-// export default CTA;
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.65)",
+                  fontSize: "0.8rem",
+                  marginTop: 8,
+                  lineHeight: 1.6,
+                }}
+              >
+                Get clarity on life, career &amp; relationships — guided by the stars.
+              </p>
+            </div>
+
+            {/* gold line */}
+            <div style={{ height: 2, background: "linear-gradient(90deg, #c9a84c, rgba(201,168,76,0.2))", borderRadius: 2, width: "40%", position: "relative", zIndex: 1 }} />
+          </div>
+
+          {/* Body */}
+          <div className="popup-body">
+            {submitted ? (
+              /* ── Success state ── */
+              <div style={{ textAlign: "center", padding: "20px 0 10px" }}>
+                <div className="success-tick">✦</div>
+                <h3 style={{ fontFamily: "'Marcellus', serif", color: "#2e0057", fontSize: "1.3rem", marginBottom: 10 }}>
+                  Session Requested!
+                </h3>
+                <p style={{ color: "#666", fontSize: "0.85rem", lineHeight: 1.7, maxWidth: 320, margin: "0 auto 24px" }}>
+                  Thank you! We'll reach out within 24 hours to confirm your consultation.
+                </p>
+                <button
+                  onClick={handleClose}
+                  className="popup-submit"
+                  style={{ maxWidth: 200 }}
+                >
+                  Close ✦
+                </button>
+              </div>
+            ) : (
+              /* ── Form ── */
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+                <div className="form-row">
+                  <Field label="First Name">
+                    <input className="input-focus" style={inputStyle} placeholder="Ravi" required />
+                  </Field>
+                  <Field label="Last Name">
+                    <input className="input-focus" style={inputStyle} placeholder="Sharma" />
+                  </Field>
+                </div>
+
+                <Field label="Email Address">
+                  <input className="input-focus" style={inputStyle} type="email" placeholder="ravi@email.com" required />
+                </Field>
+
+                <div className="form-row">
+                  <Field label="Date of Birth">
+                    <input className="input-focus" style={inputStyle} type="date" required />
+                  </Field>
+                  <Field label="Time of Birth">
+                    <input className="input-focus" style={inputStyle} type="time" />
+                  </Field>
+                </div>
+
+                <Field label="Consultation Type">
+                  <select className="input-focus" style={{ ...inputStyle, cursor: "pointer" }} required>
+                    <option value="">Select a topic…</option>
+                    {[
+                      "Marriage Challenges",
+                      "Emotional Healing",
+                      "Career Confusion",
+                      "Personal Growth",
+                      "Spiritual Awakening",
+                    ].map((o) => (
+                      <option key={o}>{o}</option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label="Your Question">
+                  <textarea
+                    className="input-focus"
+                    style={{ ...inputStyle, minHeight: 80, resize: "vertical" }}
+                    placeholder="Briefly describe what you'd like guidance on…"
+                  />
+                </Field>
+
+                <div className="popup-divider" />
+
+                <button type="submit" className="popup-submit">
+                  Reserve My Session ✦
+                </button>
+
+                <p style={{ textAlign: "center", fontSize: "0.72rem", color: "#aaa", marginTop: -4 }}>
+                  🔒 Your details are private &amp; secure
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default PopUp;

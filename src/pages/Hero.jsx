@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import bannerDesktop from "/public/banner.png";
+import Popup from "./PopUp";
 
 const Hero = () => {
   const badgeRef = useRef(null);
@@ -17,6 +18,7 @@ const Hero = () => {
   };
 
   const [view, setView] = useState(getView);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setView(getView());
@@ -387,6 +389,10 @@ const Hero = () => {
               <a
                 href="#booknow"
                 className="btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowPopup(true);
+                }}
                 style={{
                   background:
                     "linear-gradient(135deg, #c9a84c 0%, #e8cc7a 50%, #c9a84c 100%)",
@@ -484,6 +490,9 @@ const Hero = () => {
           </div>
         </div>
       </section>
+
+      {/* Popup */}
+      <Popup isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
     
   );
