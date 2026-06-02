@@ -1,10 +1,5 @@
 import { MapPin, Phone, Mail } from "lucide-react";
-
-<<<<<<< HEAD
 import logo from "/logo.png";
-=======
-import logo from "/public/logo.png";
->>>>>>> 9ffe340b65c763c95e9f83008314d835bae6f52a
 
 /* ── SVG brand icons (no external lib needed) ── */
 const InstagramIcon = () => (

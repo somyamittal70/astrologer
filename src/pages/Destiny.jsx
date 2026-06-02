@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { BadgeInfo, Orbit, HeartHandshake, Sparkles } from "lucide-react";
 import { Reveal, SectionHeader } from "../components/Shared";
 import astrologerImg from "/astrologer.jpeg";
-import astrologerImg from "/public/astrologer.jpeg";
 
 const cards = [
   {
