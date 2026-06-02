@@ -1,11 +1,8 @@
 import { useEffect, useRef } from "react";
 import { BadgeInfo, Orbit, HeartHandshake, Sparkles } from "lucide-react";
 import { Reveal, SectionHeader } from "../components/Shared";
-<<<<<<< HEAD
 import astrologerImg from "/astrologer.jpeg";
-=======
 import astrologerImg from "/public/astrologer.jpeg";
->>>>>>> 9ffe340b65c763c95e9f83008314d835bae6f52a
 
 const cards = [
   {
