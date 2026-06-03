@@ -395,11 +395,7 @@ const Footer = () => (
         </span>
         <span>
           <a href="#" style={{ color: "white", textDecoration: "none" }}>
-            Privacy Policy
-          </a>
-          {" · "}
-          <a href="#" style={{ color: "white", textDecoration: "none" }}>
-            Terms of Service
+            @Developed by Debox Technology
           </a>
         </span>
       </div>
