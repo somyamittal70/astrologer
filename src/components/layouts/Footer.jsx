@@ -344,7 +344,7 @@ const Footer = () => (
             {[
               [MapPin, "New Delhi, 110001"],
               [Phone, "+91-8750803540"],
-              [Mail, "jyotirmay.kamal@gmail.com"],
+              [Mail, "info@theastropalace.com"],
             ].map(([Icon, text]) => (
               <li
                 key={text}

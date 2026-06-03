@@ -400,22 +400,9 @@ const PopUp = ({ isOpen, onClose }) => {
             <FloatingStars />
 
             <div style={{ marginBottom: 14, position: "relative", zIndex: 1 }}>
-              <div
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 7,
-                  background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.35)",
-                  borderRadius: 30, padding: "5px 14px", marginBottom: 12,
-                }}
-              >
-                <Sparkles size={13} color="#c9a84c" />
-                <span style={{ fontSize: "0.7rem", color: "#c9a84c", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>
-                  Free Consultation Available
-                </span>
-              </div>
-
               <h2 style={{ fontFamily: "'Marcellus', serif", color: "#fff", fontSize: "clamp(1.3rem, 4vw, 1.65rem)", lineHeight: 1.3, margin: 0 }}>
                 Book Your Personal<br />
-                <span style={{ color: "#c9a84c" }}>Astrology Session</span>
+                <span style={{ color: "#c9a84c" }}>Clarity Session</span>
               </h2>
 
               <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.8rem", marginTop: 8, lineHeight: 1.6 }}>
